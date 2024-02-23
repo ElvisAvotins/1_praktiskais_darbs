@@ -1,4 +1,4 @@
-# 1_projekts_AI
+# Uzdevuma nosacījumi
 
 Papildu prasības programmatūrai 
 
