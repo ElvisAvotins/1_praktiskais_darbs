@@ -1,0 +1,1 @@
+# 1_projekts_AI
