@@ -2,10 +2,10 @@
 ---TO-DO---
 1. Game <- Evita
 2. Player <- Rinalds
-3. AI <- Artūrs
+3. AI 
   --Minimax
   --Alpha-Beta
-  --Selecting best move
+  --Selecting best move <- Artūrs
 5. Game state <- Juris
 6. Grafiskais <- Elvis
 7. Dokumentācija
