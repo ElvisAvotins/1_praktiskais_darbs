@@ -1,4 +1,15 @@
 # Praktiskā darba apraksts
+---TO-DO---
+1. Game <- Evita
+2. Player <- Rinalds
+3. AI <- Artūrs
+   --Minimax
+   --Alpha-Beta
+   --Selecting best move
+4. Game state <- Juris
+5. Grafiskais <- Elvis
+6. Dokumentācija
+
 ---Uzdevuma nosacījumi---
 
 Papildu prasības programmatūrai
@@ -30,7 +41,7 @@ Minimaksa algoritms un Alfa-beta algoritms (kas abi var būt realizēti kā Pār
 Tādējādi izstrādājot darbu, studentu komandai ir jāizpilda šādi soļi:
 
 1. jāsaņem spēle no mācībspēka;
-2. jāizvēlas programmēšanas vide/valoda;
+2. jāizvēlas programmēšanas vide/valoda; Python
 3. jāprojektē, jārealizē un jātestē spēle;
 4. jāveic eksperimenti ar abiem algoritmiem;
 5. jāsagatavo atskaite par izstrādāto spēli un tā ir jāiesniedz e-studiju kursā;
