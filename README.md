@@ -3,9 +3,9 @@
 1. Game <- Evita
 2. Player <- Rinalds
 3. AI <- Artūrs
-/n--Minimax
-/n--Alpha-Beta
-/n--Selecting best move
+\n--Minimax
+\n--Alpha-Beta
+\n--Selecting best move
 5. Game state <- Juris
 6. Grafiskais <- Elvis
 7. Dokumentācija
