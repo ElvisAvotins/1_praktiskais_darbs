@@ -7,6 +7,7 @@
   --Minimax
   --Alpha-Beta
   --Selecting best move 
+  
 5. Game state <- Juris
 6. Grafiskais <- Elvis
 7. Dokumentācija
