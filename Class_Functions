@@ -1,0 +1,92 @@
+class Game:
+  def startGame():
+    // starts the game loop / player choice of the starting number
+    pass
+
+  def choose_algorithm(self):
+    // Choose between Minimax and Alpha-Beta pruning algorithms.
+    pass
+
+  def randomNumbers():
+    // Generates 5 random numbers from 20K to 30K that devide by 12
+    pass
+
+  def chooseOneRandomNumber():
+    // The player chooses one of the 5 randomRumbers that were generated
+    pass
+
+  def scoreUpdate():
+    // Updates the score depending on the result of the turn
+        //even 
+        //odd 
+        //ends in 0 or 5
+    // Here have to figure out if the function stays here or is moved to class Player
+    pass
+
+  def gameOver():
+    // Checks all the posible ways when the game could end, including no possible mooves then the game is draw
+    pass
+
+  def endGame():
+    // 
+    pass
+
+
+
+class Player:
+  def chooseDivisor():
+    // Implementing the function where the player chooses what number to devide with (2, 3 or 4)
+    pass
+
+  def scoreUpdate():
+    // Updates the score depending on the result of the turn
+        //even 
+        //odd 
+        //ends in 0 or 5
+    // Here have to figure out if the function stays here or is moved to class Game
+    pass
+
+
+
+class AI():
+  def minimax(self, state, depth): // This probably is a bit diferent 
+    // Implement MiniMax for decition making
+    pass
+
+  def alphaBeta(self, state, depth, alpha, beta):
+    // Implement Alpha Beta for decition making
+    pass
+
+  def evaluateGameState()
+    For AI to make decitions
+    pass
+
+
+class GameState:
+  def divideNumber():
+    // Divides the current number on the board and updates the game state
+    pass
+
+  def updateBank():
+    // Updates banks points with the given points if any
+    pass
+
+
+
+
+class Graphics:
+  def DisplayAlgorithmChoice():
+    // Gives options to player to choose between Minimax and Alpha_Beta algorithm
+
+  def displayGameState():
+    // Displays the current state of the game
+    pass
+    
+  def playerChoice():
+    // Prompts the player to make a choice regarding starting number and the diviisors (2, 3 or 4)
+    pass
+  
+  def displayEndGame():
+    // Displays the winner or draw and shows points 
+    // Displays new Game (Optional I am guessing but shoul also implement that)
+    pass
