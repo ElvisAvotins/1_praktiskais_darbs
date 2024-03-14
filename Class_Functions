@@ -8,7 +8,9 @@ class Game:
     pass
 
   def randomNumbers():
-    // Generates 5 random numbers from 20K to 30K that devide by 12
+    // Generates 5 random numbers from 20K to 30K that divide by 12
+    // Create a list of all the numbers that reach 10 or under 
+    // Choose from one of the numbers in the list
     pass
 
   def chooseOneRandomNumber():
@@ -30,6 +32,7 @@ class Game:
   def endGame():
     // 
     pass
+
 
 
 
