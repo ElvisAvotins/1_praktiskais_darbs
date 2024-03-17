@@ -2,7 +2,7 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from tkinter import font as tkFont
-
+from Fixed_Numbers import numbers_that_can_reduce
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
@@ -28,16 +28,9 @@ root.option_add("*foreground", fg_color)
 
 
 def randomNumbers():
-    ## Generates 5 random numbers from 20K to 30K that devide by 12
-    count = 0
+    
     randomList = []
-
-    while count < 5:
-      ranNum = random.randint(20000, 30000)
-      if ranNum % 12 == 0:
-        randomList.append(ranNum)
-        count += 1
-    return randomList
+    return random.sample(numbers_that_can_reduce, 5)
 
 
 def gameOver():
