@@ -2,7 +2,7 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from tkinter import font as tkFont
-from Fixed_Numbers import numbers_that_can_reduce
+from Game import randomNumbers 
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
@@ -25,12 +25,6 @@ root.geometry("500x500")
 root.config(bg=bg_color)
 root.option_add("*background", bg_color)
 root.option_add("*foreground", fg_color)
-
-
-def randomNumbers():
-    
-    randomList = []
-    return random.sample(numbers_that_can_reduce, 5)
 
 
 def gameOver():
@@ -100,7 +94,10 @@ def quitGame():
 
 
 def startGameScreen(): # 1. screen Choose parameters for the game
-    global starterButtons 
+    global starterButtons, numberButtons
+
+    numbers = randomNumbers()
+    
     textWhoStarts = tk.Label(root, text="Choose who starts the game!")
     textWhoStarts.grid(row=0, column=0, columnspan=3, padx=5, pady=5)
     
