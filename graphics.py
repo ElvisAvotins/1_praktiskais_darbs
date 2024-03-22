@@ -142,41 +142,51 @@ def startGameScreen(): # 1. screen Choose parameters for the game
     startGameButton.grid(row=10, column=0, columnspan=3, padx=5, pady=20)
 
 def gameScreen(): # 2. screen 
-    global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints
-    # Checks if all the buttons have been pressed for starting the game
-    if chosenStarter and chosenNumber and chosenAlgorithm: 
-        clearWidgets()  # Clear the window
+  global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints
+  # Checks if all the buttons have been pressed for starting the game
+  if chosenStarter and chosenNumber and chosenAlgorithm: 
+      clearWidgets()  # Clear the window
 
-        largeFont = tkFont.Font(size=24)  
+      largeFont = tkFont.Font(size=24)  
 
-        tk.Label(root, text=f"Algorithm: {chosenAlgorithm}", bg=bg_color, fg=fg_color).grid(row=0, column=0, columnspan=2, padx=5, pady=(20, 0), sticky='w')
-        tk.Label(root, text=f"Starter: {chosenStarter}", bg=bg_color, fg=fg_color).grid(row=1, column=0, columnspan=2, padx=5, pady=(10, 20), sticky='w')
+      tk.Label(root, text=f"Algorithm: {chosenAlgorithm}", bg=bg_color, fg=fg_color).grid(row=0, column=0, columnspan=2, padx=5, pady=(20, 0), sticky='w')
+      tk.Label(root, text=f"Starter: {chosenStarter}", bg=bg_color, fg=fg_color).grid(row=1, column=0, columnspan=2, padx=5, pady=(10, 20), sticky='w')
 
-        # For the chosen number, ensure it's centered if desired by adjusting columnspan and sticky options
-        tk.Label(root, text=f"{chosenNumber}", bg=bg_color, fg=fg_color, font=largeFont).grid(row=2, column=0, columnspan=2, padx=5, pady=20, sticky='w')
-        
-        tk.Label(root, text=f"User points: {humanPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=0, columnspan=2, padx=5, pady=20, sticky='w')
-        tk.Label(root, text=f"Computer points: {aiPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=2, columnspan=2, padx=5, pady=20, sticky='w')
-        
-        # TODO: Display game state table moves of user and PC (Number, divider, player)
-        
-        divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color)
-        divider2.grid(row=4, column=0, columnspan=1, padx=5, pady=5)
+      # For the chosen number, ensure it's centered if desired by adjusting columnspan and sticky options
+      number_label = tk.Label(root, text=f"{chosenNumber}", bg=bg_color, fg=fg_color, font=largeFont)
+      number_label.grid(row=2, column=0, columnspan=2, padx=5, pady=20, sticky='w')
 
-        divider3 = tk.Button(root, text="3", bg=bg_color, fg=fg_color)
-        divider3.grid(row=4, column=1, columnspan=1, padx=5, pady=5)
+      tk.Label(root, text=f"User points: {humanPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+      tk.Label(root, text=f"Computer points: {aiPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=2, columnspan=2, padx=5, pady=20, sticky='w')
 
-        divider4 = tk.Button(root, text="4", bg=bg_color, fg=fg_color)
-        divider4.grid(row=4, column=2, columnspan=1, padx=5, pady=5)
+      # TODO: Display game state table moves of user and PC (Number, divider, player)
 
-        tk.Label(root, text=f"Games won User: ", bg=bg_color, fg=fg_color).grid(row=5, column=0, columnspan=2, padx=5, pady=20, sticky='w')
-        tk.Label(root, text=f"Computer: ", bg=bg_color, fg=fg_color).grid(row=5, column=2, columnspan=2, padx=5, pady=20, sticky='w')
+      def divide_number(divider):
+        global chosenNumber
+        if chosenNumber % divider != 0:
+            messagebox.showerror("Error", "Division result is not a whole number!")
+        else:
+            chosenNumber //= divider
+            number_label.config(text=chosenNumber)
 
-        tk.Label(root, text=f"Computer visited edges: ", bg=bg_color, fg=fg_color).grid(row=6, column=0, columnspan=2, padx=5, pady=20, sticky='w')
-        tk.Label(root, text=f"Computer average turn time: ", bg=bg_color, fg=fg_color).grid(row=7, column=0, columnspan=2, padx=5, pady=20, sticky='w')
 
-    else:
-        messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")
+      divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, command=lambda: divide_number(2))
+      divider2.grid(row=4, column=0, columnspan=1, padx=5, pady=5)
+
+      divider3 = tk.Button(root, text="3", bg=bg_color, fg=fg_color, command=lambda: divide_number(3))
+      divider3.grid(row=4, column=1, columnspan=1, padx=5, pady=5)
+
+      divider4 = tk.Button(root, text="4", bg=bg_color, fg=fg_color, command=lambda: divide_number(4))
+      divider4.grid(row=4, column=2, columnspan=1, padx=5, pady=5)
+
+      tk.Label(root, text=f"Games won User: ", bg=bg_color, fg=fg_color).grid(row=5, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+      tk.Label(root, text=f"Computer: ", bg=bg_color, fg=fg_color).grid(row=5, column=2, columnspan=2, padx=5, pady=20, sticky='w')
+
+      tk.Label(root, text=f"Computer visited edges: ", bg=bg_color, fg=fg_color).grid(row=6, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+      tk.Label(root, text=f"Computer average turn time: ", bg=bg_color, fg=fg_color).grid(row=7, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+
+  else:
+      messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")
 
 
 def endGameScreen(): # 3. screen <-- Call this after the game has ended
