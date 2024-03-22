@@ -1,1 +1,23 @@
+import math
 
+def generate_moves(number):
+    moves = []
+    if number % 2 == 0:
+        moves.append(number // 2)
+    if number % 3 == 0:
+        moves.append(number // 3)
+    if number % 4 == 0:
+        moves.append(number // 4)
+    return moves
+
+def evaluate_score(number):
+    if number % 10 == 0 or number % 10 == 5:
+        return 1
+    return 0
+
+def minimax(number, depth, is_maximizing):
+    if number <= 10 or depth == 0:
+        return evaluate_score(number), None
+
+    if is_maximizing:
+  
