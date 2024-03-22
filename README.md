@@ -15,6 +15,20 @@
 7. Grafiskais <- Elvis
 8. Dokumentācija
 
+1. Punktu skaitīšana Juris
+2. Minimax User - min PC- max Evita Artūrs
+3. Heiristiskā User - min PC- max Evita
+4. Alpha - beta User - min PC- max Evita Artūrs
+5. Spēļu skaits uzvarētais Elvis
+6. Bank points Elvis
+7. Visited edges algorhithm  
+8. Average turn time PC Evita Artūrs
+9. Random numbers starting Evita
+10. Spēles beigas Elvis
+12. Atskaite Rinalds
+13. Public Github Elvis
+
+
 ---Uzdevuma nosacījumi---
 
 Papildu prasības programmatūrai
