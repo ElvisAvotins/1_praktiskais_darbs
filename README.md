@@ -11,8 +11,9 @@
   --Selecting best move 
   
 5. Game state <- Juris
-6. Grafiskais <- Elvis
-7. Dokumentācija
+   Punktu skaitīšana.
+7. Grafiskais <- Elvis
+8. Dokumentācija
 
 ---Uzdevuma nosacījumi---
 
