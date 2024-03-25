@@ -2,7 +2,7 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from tkinter import font as tkFont
-
+from Huristic2 import *
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
@@ -69,6 +69,9 @@ def selectStarter(starter):
     chosenStarter = starter
     updateButtonSelection(starterButtons, starterButtons[0] if starter == "User" else  starterButtons[1])
     print("The game is gona start: ", starter)
+
+
+
 
 
 def selectAlgorithm(algorithm):
@@ -173,15 +176,25 @@ def gameScreen(): # 2. screen
       # TODO: Display game state table moves of user and PC (Number, divider, player)
 
       def divide_number(divider):
-        global chosenNumber
+        global chosenNumber, isPlayersTurn, humanPoints, aiPoints
         if chosenNumber % divider != 0:
             messagebox.showerror("Error", "Division result is not a whole number!")
         else:
             chosenNumber //= divider
             number_label.config(text=chosenNumber)
 
+            isPlayersTurn = False  # Update the turn to AI's turn
+        state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
+        edges_visited = ai_make_move(state, number_label)
+        edge_label.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
 
+
+
+
+            
       divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, command=lambda: divide_number(2))
+      #divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, command=lambda: divide_number(2, edge_label))
+
       divider2.grid(row=4, column=0, columnspan=1, padx=5, pady=5)
 
       divider3 = tk.Button(root, text="3", bg=bg_color, fg=fg_color, command=lambda: divide_number(3))
@@ -193,11 +206,53 @@ def gameScreen(): # 2. screen
       tk.Label(root, text=f"Games won User: ", bg=bg_color, fg=fg_color).grid(row=5, column=0, columnspan=2, padx=5, pady=20, sticky='w')
       tk.Label(root, text=f"Computer: ", bg=bg_color, fg=fg_color).grid(row=5, column=2, columnspan=2, padx=5, pady=20, sticky='w')
 
-      tk.Label(root, text=f"Computer visited edges: ", bg=bg_color, fg=fg_color).grid(row=6, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+      edge_label = tk.Label(root, text=f"Computer visited edges: ", bg=bg_color, fg=fg_color)
+      edge_label.grid(row=6, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+
       tk.Label(root, text=f"Computer average turn time: ", bg=bg_color, fg=fg_color).grid(row=7, column=0, columnspan=2, padx=5, pady=20, sticky='w')
 
   else:
       messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")
+
+
+def ai_make_move(state, number_label):
+    global chosenNumber, isPlayersTurn, humanPoints, aiPoints
+    # Example usage of the minimax function from Huristic2.py
+    if chosenAlgorithm == "Minimax":
+        score, best_move = minimax(state, 0, True)
+        if best_move is not None:
+            chosenNumber = best_move
+            isPlayersTurn = True
+            humanPoints += state['chosenNumber'] % chosenNumber  # Update human points based on the move
+            state['humanPoints'] = humanPoints
+            print(f"AI chooses {chosenNumber}")
+            # Update the label displaying the chosen number
+            number_label.config(text=chosenNumber)
+            if gameOver():
+                endGameScreen()
+    else:
+        print("Alpha Beta is not yet implemented")
+
+def ai_make_move(state, number_label):
+    global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor
+    # Example usage of the minimax function from Huristic2.py
+    if chosenAlgorithm == "Minimax":
+        score, best_move, edges_visited, bestDivisor = minimax(state, 0, True)  # Modify minimax to return edges_visited and divisor
+        if best_move is not None:
+            chosenNumber = best_move
+            isPlayersTurn = True
+            humanPoints += state['chosenNumber'] % chosenNumber  # Update human points based on the move
+            state['humanPoints'] = humanPoints
+            print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
+            print(f"Number of edges visited: {edges_visited}")
+            # Update the label displaying the chosen number
+            number_label.config(text=chosenNumber)
+            if gameOver():
+                endGameScreen()
+            return edges_visited  # Return the number of edges visited
+    else:
+        print("Alpha Beta is not yet implemented")
+
 
 
 def endGameScreen(): # 3. screen <-- Call this after the game has ended
