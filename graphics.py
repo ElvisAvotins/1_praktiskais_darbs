@@ -2,7 +2,7 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from tkinter import font as tkFont
-from Huristic2 import *
+from Algorithms import *
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
