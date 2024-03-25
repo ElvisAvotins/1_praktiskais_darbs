@@ -2,7 +2,7 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from tkinter import font as tkFont
-from Game import randomNumbers 
+
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
@@ -25,6 +25,17 @@ root.geometry("500x500")
 root.config(bg=bg_color)
 root.option_add("*background", bg_color)
 root.option_add("*foreground", fg_color)
+
+def randomNumbers():
+    count = 0
+    randomlist = []
+
+    while count < 5:
+        num = random.randint(20000, 30000)
+        if num % 12 == 0:
+            randomlist.append(num)
+            count += 1
+    return randomlist
 
 
 def gameOver():
