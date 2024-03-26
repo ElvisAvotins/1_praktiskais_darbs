@@ -234,14 +234,17 @@ def ai_make_move(state, number_label):
         print("Alpha Beta is not yet implemented")
 
 def ai_make_move(state, number_label):
+    # Šeit tiek atzīmēti visi lielumi kas tiks izmantoti šajā funkcijā, un to vērtības ir iespējams mainīt globāli
     global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor
     # Example usage of the minimax function from Huristic2.py
     if chosenAlgorithm == "Minimax":
-        score, best_move, edges_visited, bestDivisor = minimax(state, 0, True)  # Modify minimax to return edges_visited and divisor
+        # Expected to return vislabāko vērtējumu for AI, the move leading to that score, cik virsotnes apmeklētas, labākais dalītājs
+        score, best_move, edges_visited, bestDivisor = minimax(state, 0, True)  # Current state, dziļums 0, is MaximizingPlayer
         if best_move is not None:
+            # Update the variables based on the best possible
             chosenNumber = best_move
             isPlayersTurn = True
-            humanPoints += state['chosenNumber'] % chosenNumber  # Update human points based on the move
+            humanPoints += state['chosenNumber'] % chosenNumber  
             state['humanPoints'] = humanPoints
             print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
             print(f"Number of edges visited: {edges_visited}")
