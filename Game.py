@@ -41,8 +41,12 @@ def gameOver():
     if not any(legal_moves):
         # It's a draw, distribute bank points according to your game rules
         # Example: split the bank points
-        humanPoints += bankPoints // 2
-        aiPoints += bankPoints // 2
+        if isPlayersTurn:
+            humanPoints += bankPoints
+        else:
+            aiPoints += bankPoints
+        #humanPoints += bankPoints // 2
+        #aiPoints += bankPoints // 2
         endGameScreen()  # Call the end game screen
         return True
     
