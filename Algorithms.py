@@ -58,7 +58,7 @@ def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
         print(f"Terminal Value: {terminal_value}, Chosen Number at Terminal: {state['chosenNumber']}")
         return terminal_value, None, edges_visited, None  # Return score, no move, edges visited, and None for divisor
     
-    if depth == float('inf'):  
+    if depth == 3:  
         heuristic_value = heuristic_evaluation(state)
         return heuristic_value, None, edges_visited, None  # Return heuristic score, no move, edges visited, and None for divisor
 
