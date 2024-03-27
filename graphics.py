@@ -3,6 +3,7 @@ import random
 from tkinter import messagebox
 from tkinter import font as tkFont
 from Algorithms import *
+from Game.py import gameOver()
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
@@ -41,16 +42,16 @@ def randomNumbers():
     return randomlist
 
 
-def gameOver():
-       #game ends when the selected number is bellow or the same as 10
-       #game ends if there are no more legal moves left
-    if chosenNumber <= 10:
-        if isPlayersTurn:
-            humanPoints += bankPoints
-        else:
-            aiPoints += aiPoints 
-        return True 
-    return False
+# def gameOver():
+#        #game ends when the selected number is bellow or the same as 10
+#        #game ends if there are no more legal moves left
+#     if chosenNumber <= 10:
+#         if isPlayersTurn:
+#             humanPoints += bankPoints
+#         else:
+#             aiPoints += aiPoints 
+#         return True 
+#     return False
 
 
 def updateButtonSelection(buttonsList, selectedButton):
