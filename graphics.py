@@ -3,7 +3,7 @@ import random
 from tkinter import messagebox
 from tkinter import font as tkFont
 from Algorithms import *
-from Game.py import gameOver()
+# from Game.py import gameOver() Pareizā sintakse japieraksta
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
