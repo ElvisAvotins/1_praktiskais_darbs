@@ -19,7 +19,7 @@ def scoreUpdate(divisor):
         else:
             aiPoints += 1
 
-    if result % 10 == 0:
+    if result % 5 == 0:
         bankPoints += 1
 
     chosenNumber = result  # Update the chosenNumber with the result of the division
