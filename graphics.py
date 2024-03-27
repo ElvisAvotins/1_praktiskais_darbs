@@ -3,7 +3,7 @@ import random
 from tkinter import messagebox
 from tkinter import font as tkFont
 from Algorithms import *
-# from Game.py import gameOver() Pareizā sintakse japieraksta
+import Game
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
@@ -41,17 +41,55 @@ def randomNumbers():
             count += 1
     return randomlist
 
+def scoreUpdate(divisor):
+    global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
+    result = chosenNumber / divisor
 
-# def gameOver():
-#        #game ends when the selected number is bellow or the same as 10
-#        #game ends if there are no more legal moves left
-#     if chosenNumber <= 10:
-#         if isPlayersTurn:
-#             humanPoints += bankPoints
-#         else:
-#             aiPoints += aiPoints 
-#         return True 
-#     return False
+    if result % 2 == 0:
+        if isPlayersTurn:
+            humanPoints -= 1
+        else:
+            aiPoints -= 1
+    else:
+        if isPlayersTurn:
+            humanPoints += 1
+        else:
+            aiPoints += 1
+
+    if result % 5 == 0:
+        bankPoints += 1
+
+    # Update the chosenNumber with the result of the division
+
+def gameOver():
+    global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
+    # Game ends when the chosen number is below or the same as 10
+    if chosenNumber <= 10:
+        if isPlayersTurn:
+            humanPoints += bankPoints
+        else:
+            aiPoints += bankPoints
+        return True
+
+    # Game ends if there are no more legal moves left
+    legal_moves = [chosenNumber % div == 0 for div in [2, 3, 4]]
+    if not any(legal_moves):
+        if isPlayersTurn:
+            humanPoints += bankPoints
+        else:
+            aiPoints += bankPoints
+        #endGameScreen()  # Call the end game screen
+        return True
+    
+    return False
+
+def WhoWins():
+    if humanPoints > aiPoints:
+        return("User")  # Call the end game screen
+    elif humanPoints < aiPoints:
+        return("Comuputer")
+    else:
+        return("Draw")
 
 
 def updateButtonSelection(buttonsList, selectedButton):
@@ -161,6 +199,12 @@ def startGameScreen(): # 1. screen Choose parameters for the game
     startGameButton = tk.Button(root, text='Start Game', bg=bg_color, fg=fg_color, command=gameScreen)
     startGameButton.grid(row=10, column=0, columnspan=3, padx=5, pady=20)
 
+def scoreLabel():
+    global bankPoints, humanPoints, aiPoints
+    tk.Label(root, text=f"Points  User: {humanPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='w')
+    tk.Label(root, text=f"Computer: {aiPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky='w')
+    tk.Label(root, text=f"Bank: {bankPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=4, columnspan=2, padx=5, pady=5, sticky='w')
+
 def gameScreen(): # 2. screen 
     global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints
     # Checks if all the buttons have been pressed for starting the game
@@ -172,9 +216,7 @@ def gameScreen(): # 2. screen
         tk.Label(root, text=f"Algorithm: {chosenAlgorithm}", bg=bg_color, fg=fg_color).grid(row=0, column=0, columnspan=2, padx=5, pady=(20, 0), sticky='w')
         tk.Label(root, text=f"Starter: {chosenStarter}", bg=bg_color, fg=fg_color).grid(row=1, column=0, columnspan=2, padx=5, pady=(10, 20), sticky='w')
 
-        tk.Label(root, text=f"Points  User: {humanPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='w')
-        tk.Label(root, text=f"Computer: {aiPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky='w')
-        tk.Label(root, text=f"Bank: {bankPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=4, columnspan=2, padx=5, pady=5, sticky='w')
+        scoreLabel()
 
         number_label = tk.Label(root, text=f"{chosenNumber}", bg=bg_color, fg=fg_color, font=largeFont)
         number_label.grid(row=3, column=0, columnspan=2, padx=5, pady=20, sticky='w')
@@ -184,10 +226,15 @@ def gameScreen(): # 2. screen
             if chosenNumber % divider != 0:
                 messagebox.showerror("Error", "Division result is not a whole number!")
             else:
+                scoreUpdate(divider)
+                scoreLabel()
+                #Upoints
+                #Cpionts
+                #Bpoints
                 chosenNumber //= divider
                 number_label.config(text=chosenNumber)
-
                 isPlayersTurn = False  # Update the turn to AI's turn
+
             state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
             edges_visited = ai_make_move(state, number_label)
             edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
@@ -212,23 +259,23 @@ def gameScreen(): # 2. screen
         messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")
 
 
-def ai_make_move(state, number_label):
-    global chosenNumber, isPlayersTurn, humanPoints, aiPoints
-    # Example usage of the minimax function from Huristic2.py
-    if chosenAlgorithm == "Minimax":
-        score, best_move = minimax(state, 0, True)
-        if best_move is not None:
-            chosenNumber = best_move
-            isPlayersTurn = True
-            humanPoints += state['chosenNumber'] % chosenNumber  # Update human points based on the move
-            state['humanPoints'] = humanPoints
-            print(f"AI chooses {chosenNumber}")
-            # Update the label displaying the chosen number
-            number_label.config(text=chosenNumber)
-            if gameOver():
-                endGameScreen()
-    else:
-        print("Alpha Beta is not yet implemented")
+# def ai_make_move(state, number_label):
+#     global chosenNumber, isPlayersTurn, humanPoints, aiPoints
+#     # Example usage of the minimax function from Huristic2.py
+#     if chosenAlgorithm == "Minimax":
+#         score, best_move = minimax(state, 0, True)
+#         if best_move is not None:
+#             chosenNumber = best_move
+#             isPlayersTurn = True
+#             humanPoints += state['chosenNumber'] % chosenNumber  # Update human points based on the move
+#             state['humanPoints'] = humanPoints
+#             print(f"AI chooses {chosenNumber}")
+#             # Update the label displaying the chosen number
+#             number_label.config(text=chosenNumber)
+#             if gameOver() == True:
+#                 endGameScreen()
+#     else:
+#         print("Alpha Beta is not yet implemented")
 
 def ai_make_move(state, number_label):
     # Šeit tiek atzīmēti visi lielumi kas tiks izmantoti šajā funkcijā, un to vērtības ir iespējams mainīt globāli
@@ -241,13 +288,15 @@ def ai_make_move(state, number_label):
             # Update the variables based on the best possible
             chosenNumber = best_move
             isPlayersTurn = True
-            humanPoints += state['chosenNumber'] % chosenNumber  
-            state['humanPoints'] = humanPoints
+            HumanNextPoints = humanPoints
+            HumanNextPoints += state['chosenNumber'] % chosenNumber  
+            state['humanPoints'] = HumanNextPoints
             print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
             print(f"Number of edges visited: {edges_visited}")
             # Update the label displaying the chosen number
             number_label.config(text=chosenNumber)
-            if gameOver():
+            scoreLabel()
+            if gameOver() == True:
                 endGameScreen()
             return edges_visited  # Return the number of edges visited
     else:
@@ -258,6 +307,8 @@ def ai_make_move(state, number_label):
 
 def endGameScreen(): # Call this when game has ended add winner in function
     clearWidgets()
+    winner = WhoWins()
+
     endLabel = tk.Label(root, text="Game Over!", bg=bg_color, fg=fg_color)
     endLabel.grid(row=0, column=0, columnspan=2, padx=5, pady=10, sticky='w')
 
@@ -269,6 +320,7 @@ def endGameScreen(): # Call this when game has ended add winner in function
         userWins += 1
     elif winner == "Computer":
         computerWins += 1
+    
 
     userWinsLabel = tk.Label(root, text=f"Games won by User: {userWins}", bg=bg_color, fg=fg_color)
     userWinsLabel.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='w')
