@@ -17,7 +17,7 @@ algorithmButtons = []
 humanPoints = 0
 aiPoints = 0
 bankPoints = 0
-isPlayersTurn = True
+isPlayersTurn = None
 userWins = 0
 computerWins = 0
 winner = ""
@@ -41,23 +41,42 @@ def randomNumbers():
             count += 1
     return randomlist
 
-def scoreUpdate(divisor):
+def scoreUpdateH(divisor):
     global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
     result = chosenNumber / divisor
-
-    if result % 2 == 0:
-        if isPlayersTurn:
+    if isPlayersTurn:
+        if result % 2 == 0:
             humanPoints -= 1
+            print(f" Point goes away from : {isPlayersTurn}, human", {chosenNumber}, {divisor})
         else:
-            aiPoints -= 1
-    else:
-        if isPlayersTurn:
             humanPoints += 1
+            print(f" Point goes to : {isPlayersTurn}, Human")
+        if result % 5 == 0:
+            bankPoints += 1
+            print(f"Round Over! Point to the bank goes from: {isPlayersTurn}, Human")
+    else:
+        humanPoints +=1
+        print(f" Point OMGGGGGGGGGG : {isPlayersTurn}, Human")     
+
+def scoreUpdate(state, divisor):
+    global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
+    #terminal_value = check_terminal(state)
+    #print(f"Terminal Value: {terminal_value}, Chosen Number at Terminal: {state['chosenNumber']}")
+    Test = state['chosenNumber']/divisor
+    print(f"Testa value: {Test}")
+    if not isPlayersTurn:
+        if Test % 2 == 0:
+            aiPoints -= 1
+            print(f" Point goes away from : {isPlayersTurn}, AI")
         else:
             aiPoints += 1
-
-    if result % 5 == 0:
-        bankPoints += 1
+            print(f" Point goes to : {isPlayersTurn}, AI", {chosenNumber}, {divisor})
+        if Test % 5 == 0:
+            bankPoints += 1
+            print(f"Round Over! Point to the bank goes from: {isPlayersTurn}, AI")
+    else:
+        aiPoints += 1
+        print(f" Point WTFFFFFFFFFFFFFF : {isPlayersTurn}, Human")
 
     # Update the chosenNumber with the result of the division
 
@@ -65,30 +84,33 @@ def gameOver():
     global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
     # Game ends when the chosen number is below or the same as 10
     if chosenNumber <= 10:
-        if isPlayersTurn:
-            humanPoints += bankPoints
-        else:
-            aiPoints += bankPoints
+        PointCount()
         return True
 
     # Game ends if there are no more legal moves left
     legal_moves = [chosenNumber % div == 0 for div in [2, 3, 4]]
     if not any(legal_moves):
-        if isPlayersTurn:
-            humanPoints += bankPoints
-        else:
-            aiPoints += bankPoints
-        #endGameScreen()  # Call the end game screen
+        PointCount()
         return True
     
     return False
 
+def PointCount():
+    global humanPoints, aiPoints, isPlayersTurn
+    if isPlayersTurn:
+        aiPoints += bankPoints
+    else:
+        humanPoints += bankPoints
+
 def WhoWins():
     if humanPoints > aiPoints:
+        print(f"HUMAN WON {aiPoints}, {humanPoints}")
         return("User")  # Call the end game screen
     elif humanPoints < aiPoints:
+        print(f"COMPUTER WON {aiPoints}, {humanPoints}")
         return("Comuputer")
     else:
+        print(f"DRAWWWWWW {aiPoints}, {humanPoints}")
         return("Draw")
 
 
@@ -211,11 +233,6 @@ def gameScreen(): # 2. screen
     if chosenStarter and chosenNumber and chosenAlgorithm: 
         clearWidgets()  # Clear the window
 
-        #if chosenStarter == "Computer" and isPlayersTurn == False:
-        #    state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
-        #    edges_visited = ai_make_move(state, number_label)
-        #    edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
-
         largeFont = tkFont.Font(size=24)  
 
         tk.Label(root, text=f"Algorithm: {chosenAlgorithm}", bg=bg_color, fg=fg_color).grid(row=0, column=0, columnspan=2, padx=5, pady=(20, 0), sticky='w')
@@ -232,7 +249,8 @@ def gameScreen(): # 2. screen
                 messagebox.showerror("Error", "Division result is not a whole number!")
                 return
             else:
-                scoreUpdate(divider)
+                #state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
+                scoreUpdateH(divider)
                 scoreLabel()
                 #Upoints
                 #Cpionts
@@ -262,6 +280,16 @@ def gameScreen(): # 2. screen
         edgeLabel.grid(row=6, column=0, columnspan=2, padx=5, pady=20, sticky='w')
 
         tk.Label(root, text=f"Computer average turn time: ", bg=bg_color, fg=fg_color).grid(row=7, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+
+        if chosenStarter == "User":
+            isPlayersTurn = True
+        else:
+            isPlayersTurn = False
+        print(f"Is it the players start {isPlayersTurn}")
+        if chosenStarter == "Computer" and isPlayersTurn == False:
+            state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
+            edges_visited = ai_make_move(state, number_label)
+            edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
 
     else:
         messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")
@@ -297,7 +325,7 @@ def ai_make_move(state, number_label):
         if best_move is not None:
             # Update the variables based on the best possible
             chosenNumber = best_move
-            scoreUpdate(best_move)
+            scoreUpdate(state,bestDivisor)
             isPlayersTurn = True
             HumanNextPoints = humanPoints
             HumanNextPoints += state['chosenNumber'] % chosenNumber  
