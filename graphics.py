@@ -138,7 +138,7 @@ def startNewGame():
     humanPoints = 0
     aiPoints = 0
     bankPoints = 0
-    isPlayersTurn = True
+    isPlayersTurn = None
     chosenStarter = None
     chosenNumber = None
     chosenAlgorithm = None
@@ -206,10 +206,15 @@ def scoreLabel():
     tk.Label(root, text=f"Bank: {bankPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=4, columnspan=2, padx=5, pady=5, sticky='w')
 
 def gameScreen(): # 2. screen 
-    global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints
+    global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints, isPlayersTurn
     # Checks if all the buttons have been pressed for starting the game
     if chosenStarter and chosenNumber and chosenAlgorithm: 
         clearWidgets()  # Clear the window
+
+        #if chosenStarter == "Computer" and isPlayersTurn == False:
+        #    state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
+        #    edges_visited = ai_make_move(state, number_label)
+        #    edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
 
         largeFont = tkFont.Font(size=24)  
 
@@ -225,6 +230,7 @@ def gameScreen(): # 2. screen
             global chosenNumber, isPlayersTurn, humanPoints, aiPoints
             if chosenNumber % divider != 0:
                 messagebox.showerror("Error", "Division result is not a whole number!")
+                return
             else:
                 scoreUpdate(divider)
                 scoreLabel()
@@ -238,6 +244,8 @@ def gameScreen(): # 2. screen
             state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
             edges_visited = ai_make_move(state, number_label)
             edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
+            #scoreUpdate(divider)
+            #scoreLabel()
             
         divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, command=lambda: divide_number(2))
         #divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, command=lambda: divide_number(2, edge_label))
@@ -280,6 +288,8 @@ def gameScreen(): # 2. screen
 def ai_make_move(state, number_label):
     # Šeit tiek atzīmēti visi lielumi kas tiks izmantoti šajā funkcijā, un to vērtības ir iespējams mainīt globāli
     global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor
+    if gameOver() == True:
+        endGameScreen()
     # Example usage of the minimax function from Huristic2.py
     if chosenAlgorithm == "Minimax":
         # Expected to return vislabāko vērtējumu for AI, the move leading to that score, cik virsotnes apmeklētas, labākais dalītājs
@@ -287,6 +297,7 @@ def ai_make_move(state, number_label):
         if best_move is not None:
             # Update the variables based on the best possible
             chosenNumber = best_move
+            scoreUpdate(best_move)
             isPlayersTurn = True
             HumanNextPoints = humanPoints
             HumanNextPoints += state['chosenNumber'] % chosenNumber  
@@ -301,6 +312,8 @@ def ai_make_move(state, number_label):
             return edges_visited  # Return the number of edges visited
     else:
         print("Alpha Beta is not yet implemented")
+        #isPlayersTurn = True
+        #scoreLabel()
 
 
 
