@@ -22,10 +22,10 @@
 12. Atskaite Rinalds
 
 Fix
-Punktu skaitisana juris
-endscreen gamepoints, + bankpoints elvis
-computer start juris
-Log files Elvis
+1.Punktu skaitisana juris (izdarīts)
+2.endscreen gamepoints, + bankpoints elvis
+3.computer start juris (izdarīts)
+4.Log files Elvis
 
 ---Uzdevuma nosacījumi---
 
