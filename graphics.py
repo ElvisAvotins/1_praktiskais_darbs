@@ -346,16 +346,16 @@ def endGameScreen(): # Call this when game has ended add winner in function
     pointsLabel.grid(row=4, column=0, columnspan=10, padx=5, pady=5, sticky='w')
 
     userWinsLabel = tk.Label(root, text=f"User: {userWins}", bg=bg_color, fg=fg_color)
-    userWinsLabel.grid(row=5, column=0, columnspan=2, padx=5, pady=5, sticky='w')
+    userWinsLabel.grid(row=5, column=0, columnspan=1, padx=5, pady=5, sticky='w')
 
     computerWinsLabel = tk.Label(root, text=f"Computer: {computerWins}", bg=bg_color, fg=fg_color)
     computerWinsLabel.grid(row=5, column=1, columnspan=1, padx=5, pady=5, sticky='w')
 
     newGameButton = tk.Button(root, text="New Game", bg=bg_color, fg=fg_color, command=startNewGame)
-    newGameButton.grid(row=6, column=0, padx=5, pady=5, sticky='w')
+    newGameButton.grid(row=6, column=0, columnspan=2, padx=10, pady=5, sticky='w')
 
     quitButton = tk.Button(root, text="Quit", bg=bg_color, fg=fg_color, command=quitGame)
-    quitButton.grid(row=6, column=1, padx=5, pady=5, sticky='w')
+    quitButton.grid(row=6, column=2, columnspan=2, padx=5, pady=5, sticky='w')
 
 
 startGameScreen()
