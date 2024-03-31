@@ -3,7 +3,7 @@ import random
 from tkinter import messagebox
 from tkinter import font as tkFont
 from Algorithms import *
-import Game
+
 
 bg_color = "#1e1e1e"
 fg_color = "grey"
@@ -96,11 +96,13 @@ def gameOver():
     return False
 
 def PointCount():
-    global humanPoints, aiPoints, isPlayersTurn
+    global humanPoints, aiPoints, isPlayersTurn, bankPoints
     if isPlayersTurn:
         aiPoints += bankPoints
+        bankPoints = 0
     else:
         humanPoints += bankPoints
+        bankPoints = 0
 
 def WhoWins():
     if humanPoints > aiPoints:
@@ -108,7 +110,7 @@ def WhoWins():
         return("User")  # Call the end game screen
     elif humanPoints < aiPoints:
         print(f"COMPUTER WON {aiPoints}, {humanPoints}")
-        return("Comuputer")
+        return("Computer")
     else:
         print(f"DRAWWWWWW {aiPoints}, {humanPoints}")
         return("Draw")
@@ -128,7 +130,7 @@ def clearWidgets():
 
 
 def selectStarter(starter):
-    #Select either User or Computer to start the gameand  call update the list
+    #Select either User or Computer to start the game and call update the list
     global chosenStarter
     chosenStarter = starter
     updateButtonSelection(starterButtons, starterButtons[0] if starter == "User" else  starterButtons[1])
@@ -223,63 +225,57 @@ def startGameScreen(): # 1. screen Choose parameters for the game
 
 def scoreLabel():
     global bankPoints, humanPoints, aiPoints
-    tk.Label(root, text=f"Points  User: {humanPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='w')
-    tk.Label(root, text=f"Computer: {aiPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky='w')
-    tk.Label(root, text=f"Bank: {bankPoints}", bg=bg_color, fg=fg_color).grid(row=2, column=4, columnspan=2, padx=5, pady=5, sticky='w')
+    tk.Label(root, text=f"----------Points----------", bg=bg_color, fg=fg_color).grid(row=2, column=0, columnspan=10, padx=5, pady=5, sticky='w')
+    tk.Label(root, text=f"User: {humanPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=0, columnspan=1, padx=5, pady=5, sticky='w')
+    tk.Label(root, text=f"Computer: {aiPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=1, columnspan=1, padx=5, pady=5, sticky='w')
+    tk.Label(root, text=f"Bank: {bankPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=2, columnspan=1, padx=5, pady=5, sticky='w')
+
+def divide_number(divider, number_label, edgeLabel):
+    global chosenNumber, isPlayersTurn, humanPoints, aiPoints
+
+    if chosenNumber % divider != 0:
+        messagebox.showerror("Error", "Division result is not a whole number!")
+        return
+    else:
+        scoreUpdateH(divider)
+        scoreLabel()
+        chosenNumber //= divider
+        number_label.config(text=chosenNumber)
+        isPlayersTurn = False
+
+    state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
+    edges_visited = ai_make_move(state, number_label)
+    edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
 
 def gameScreen(): # 2. screen 
     global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints, isPlayersTurn
-    # Checks if all the buttons have been pressed for starting the game
+
     if chosenStarter and chosenNumber and chosenAlgorithm: 
-        clearWidgets()  # Clear the window
+        clearWidgets()
 
         largeFont = tkFont.Font(size=24)  
 
-        tk.Label(root, text=f"Algorithm: {chosenAlgorithm}", bg=bg_color, fg=fg_color).grid(row=0, column=0, columnspan=2, padx=5, pady=(20, 0), sticky='w')
-        tk.Label(root, text=f"Starter: {chosenStarter}", bg=bg_color, fg=fg_color).grid(row=1, column=0, columnspan=2, padx=5, pady=(10, 20), sticky='w')
+        tk.Label(root, text=f"Algorithm: {chosenAlgorithm}", bg=bg_color, fg=fg_color).grid(row=0, column=0, columnspan=10, padx=5, pady=(20, 0), sticky='w')
+        tk.Label(root, text=f"Starter: {chosenStarter}", bg=bg_color, fg=fg_color).grid(row=1, column=0, columnspan=10, padx=5, pady=(10, 20), sticky='w')
 
         scoreLabel()
 
         number_label = tk.Label(root, text=f"{chosenNumber}", bg=bg_color, fg=fg_color, font=largeFont)
-        number_label.grid(row=3, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+        number_label.grid(row=4, column=0, columnspan=10, padx=5, pady=20, sticky='w')
 
-        def divide_number(divider):
-            global chosenNumber, isPlayersTurn, humanPoints, aiPoints
-            if chosenNumber % divider != 0:
-                messagebox.showerror("Error", "Division result is not a whole number!")
-                return
-            else:
-                #state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
-                scoreUpdateH(divider)
-                scoreLabel()
-                #Upoints
-                #Cpionts
-                #Bpoints
-                chosenNumber //= divider
-                number_label.config(text=chosenNumber)
-                isPlayersTurn = False  # Update the turn to AI's turn
+        divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(2, number_label, edgeLabel))
+        divider2.grid(row=5, column=0, columnspan=1, padx=5, pady=5)
 
-            state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
-            edges_visited = ai_make_move(state, number_label)
-            edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
-            #scoreUpdate(divider)
-            #scoreLabel()
-            
-        divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, command=lambda: divide_number(2))
-        #divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, command=lambda: divide_number(2, edge_label))
+        divider3 = tk.Button(root, text="3", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(3, number_label, edgeLabel))
+        divider3.grid(row=5, column=1, columnspan=1, padx=5, pady=5)
 
-        divider2.grid(row=4, column=0, columnspan=1, padx=5, pady=5)
-
-        divider3 = tk.Button(root, text="3", bg=bg_color, fg=fg_color, command=lambda: divide_number(3))
-        divider3.grid(row=4, column=1, columnspan=1, padx=5, pady=5)
-
-        divider4 = tk.Button(root, text="4", bg=bg_color, fg=fg_color, command=lambda: divide_number(4))
-        divider4.grid(row=4, column=2, columnspan=1, padx=5, pady=5)
+        divider4 = tk.Button(root, text="4", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(4, number_label, edgeLabel))
+        divider4.grid(row=5, column=2, columnspan=1, padx=5, pady=5)
 
         edgeLabel = tk.Label(root, text=f"Computer visited edges: ", bg=bg_color, fg=fg_color)
-        edgeLabel.grid(row=6, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+        edgeLabel.grid(row=6, column=0, columnspan=10, padx=5, pady=20, sticky='w')
 
-        tk.Label(root, text=f"Computer average turn time: ", bg=bg_color, fg=fg_color).grid(row=7, column=0, columnspan=2, padx=5, pady=20, sticky='w')
+        tk.Label(root, text=f"Computer average turn time: ", bg=bg_color, fg=fg_color).grid(row=7, column=0, columnspan=10, padx=5, pady=20, sticky='w')
 
         if chosenStarter == "User":
             isPlayersTurn = True
@@ -294,24 +290,6 @@ def gameScreen(): # 2. screen
     else:
         messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")
 
-
-# def ai_make_move(state, number_label):
-#     global chosenNumber, isPlayersTurn, humanPoints, aiPoints
-#     # Example usage of the minimax function from Huristic2.py
-#     if chosenAlgorithm == "Minimax":
-#         score, best_move = minimax(state, 0, True)
-#         if best_move is not None:
-#             chosenNumber = best_move
-#             isPlayersTurn = True
-#             humanPoints += state['chosenNumber'] % chosenNumber  # Update human points based on the move
-#             state['humanPoints'] = humanPoints
-#             print(f"AI chooses {chosenNumber}")
-#             # Update the label displaying the chosen number
-#             number_label.config(text=chosenNumber)
-#             if gameOver() == True:
-#                 endGameScreen()
-#     else:
-#         print("Alpha Beta is not yet implemented")
 
 def ai_make_move(state, number_label):
     # Šeit tiek atzīmēti visi lielumi kas tiks izmantoti šajā funkcijā, un to vērtības ir iespējams mainīt globāli
@@ -351,31 +329,33 @@ def endGameScreen(): # Call this when game has ended add winner in function
     winner = WhoWins()
 
     endLabel = tk.Label(root, text="Game Over!", bg=bg_color, fg=fg_color)
-    endLabel.grid(row=0, column=0, columnspan=2, padx=5, pady=10, sticky='w')
+    endLabel.grid(row=0, column=0, columnspan=10, padx=5, pady=10, sticky='w')
 
     winnerLabel = tk.Label(root, text=f"Winner: {winner}", bg=bg_color, fg=fg_color)
-    winnerLabel.grid(row=1, column=0, columnspan=2, padx=5, pady=10, sticky='w')
+    winnerLabel.grid(row=1, column=0, columnspan=10, padx=5, pady=10, sticky='w')
 
     global userWins, computerWins
     if winner == "User":
         userWins += 1
-    elif winner == "Computer":
+    if winner == "Computer":
         computerWins += 1
     
+    scoreLabel()
 
-    userWinsLabel = tk.Label(root, text=f"Games won by User: {userWins}", bg=bg_color, fg=fg_color)
-    userWinsLabel.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='w')
+    pointsLabel = tk.Label(root, text=f"-------Games won-------", bg=bg_color, fg=fg_color)
+    pointsLabel.grid(row=4, column=0, columnspan=10, padx=5, pady=5, sticky='w')
+
+    userWinsLabel = tk.Label(root, text=f"User: {userWins}", bg=bg_color, fg=fg_color)
+    userWinsLabel.grid(row=5, column=0, columnspan=2, padx=5, pady=5, sticky='w')
 
     computerWinsLabel = tk.Label(root, text=f"Computer: {computerWins}", bg=bg_color, fg=fg_color)
-    computerWinsLabel.grid(row=2, column=2, columnspan=2, padx=5, pady=5, sticky='w')
+    computerWinsLabel.grid(row=5, column=1, columnspan=1, padx=5, pady=5, sticky='w')
 
     newGameButton = tk.Button(root, text="New Game", bg=bg_color, fg=fg_color, command=startNewGame)
-    newGameButton.grid(row=3, column=0, padx=5, pady=5, sticky='w')
+    newGameButton.grid(row=6, column=0, padx=5, pady=5, sticky='w')
 
     quitButton = tk.Button(root, text="Quit", bg=bg_color, fg=fg_color, command=quitGame)
-    quitButton.grid(row=3, column=1, padx=5, pady=5, sticky='w')
-
-
+    quitButton.grid(row=6, column=1, padx=5, pady=5, sticky='w')
 
 
 startGameScreen()
