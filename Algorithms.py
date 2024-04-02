@@ -57,7 +57,6 @@ def check_terminal(state):
 
 
 
-
 def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
     #Pårbauda vai spele var turpinåties vai ir end of the game
     terminal_value = check_terminal(state)
@@ -128,6 +127,48 @@ def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
                 bestDivisor = state['chosenNumber'] // child['chosenNumber']  # Update the best divisor
         return minEval, bestMove, edges_visited, bestDivisor  # Return the best divisor along with other values
 
+
+def alphaBeta(state, depth, isMaximizingPlayer, edges_visited, alpha, beta):
+    terminal_value = check_terminal(state)
+
+    if terminal_value is not None:
+        print(f"Terminal Value: {terminal_value}, Chosen Number at Terminal: {state['chosenNumber']}")
+        return terminal_value, None, edges_visited, None
+
+    if depth == 3:
+        heuristic_value = heuristic_evaluation(state, depth)
+        return heuristic_value, None, edges_visited, None
+
+    if isMaximizingPlayer:
+        maxEval = float('-inf')
+        bestMove = None
+        bestDivisor = None
+
+        for child in get_children(state, True):
+            eval, _, edges_visited, _ = alphaBeta(child, depth + 1,  False, edges_visited + 1, alpha, beta)
+            maxEval = max(maxEval, eval)
+            if maxEval >= beta:
+                return maxEval, bestMove, edges_visited, bestDivisor
+            if maxEval > alpha:
+                alpha = maxEval
+                bestMove = child['chosenNumber']
+                bestDivisor = state['chosenNumber'] // child['chosenNumber']
+        return maxEval, bestMove, edges_visited, bestDivisor
+    else:
+        minEval = float('inf')
+        bestMove = None
+        bestDivisor = None
+
+        for child in get_children(state, False):
+            eval, _, edges_visited, _ = alphaBeta(child, depth + 1,  True, edges_visited + 1, alpha, beta)
+            minEval = min(minEval, eval)
+            if minEval <= alpha:
+                return minEval, bestMove, edges_visited, bestDivisor
+            if minEval < beta:
+                beta = minEval
+                bestMove = child['chosenNumber']
+                bestDivisor = state['chosenNumber'] // child['chosenNumber']
+        return minEval, bestMove, edges_visited, bestDivisor
 
     
 def heuristic_evaluation(state, depth=None):
