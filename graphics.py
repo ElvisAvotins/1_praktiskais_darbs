@@ -2,6 +2,7 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from tkinter import font as tkFont
+import tkinter
 from Algorithms import *
 
 
@@ -251,8 +252,11 @@ def divide_number(divider, number_label, edgeLabel):
 
     state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
     edges_visited = ai_make_move(state, number_label)
-    edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
-
+    try:
+        edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
+    except tkinter.TclError:
+        pass
+        
 def gameScreen(): # 2. screen 
     global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints, isPlayersTurn
 
