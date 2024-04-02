@@ -157,7 +157,8 @@ def selectNumber(btn, number):
 
 
 def startNewGame():
-    global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenStarter, chosenNumber, chosenAlgorithm
+    global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenStarter, chosenNumber, chosenAlgorithm, starterButtons, algorithmButtons, numberButtons
+
 
     humanPoints = 0
     aiPoints = 0
@@ -166,6 +167,11 @@ def startNewGame():
     chosenStarter = None
     chosenNumber = None
     chosenAlgorithm = None
+
+    starterButtons = []
+    algorithmButtons = []
+    numberButtons = []
+    
 
     clearWidgets()
     startGameScreen()
