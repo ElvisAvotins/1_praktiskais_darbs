@@ -327,11 +327,27 @@ def ai_make_move(state, number_label):
                 endGameScreen()
             return edges_visited  # Return the number of edges visited
     else:
-        print("Alpha Beta is not yet implemented")
+
+        score, best_move, edges_visited, bestDivisor = alphaBeta(state, 0, True, 0, -float('inf'), float('inf'))  # Current state, dziļums 0, is MaximizingPlayer
+        
+        if best_move is not None:
+            # Update the variables based on the best possible
+            chosenNumber = best_move
+            scoreUpdate(state,bestDivisor)
+            isPlayersTurn = True
+            HumanNextPoints = humanPoints
+            HumanNextPoints += state['chosenNumber'] % chosenNumber  
+            state['humanPoints'] = HumanNextPoints
+            #print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
+            #print(f"Number of edges visited: {edges_visited}")
+            # Update the label displaying the chosen number
+            number_label.config(text=chosenNumber)
+            scoreLabel()
+            if gameOver() == True:
+                endGameScreen()
+            return edges_visited  # Return the number of edges visited
         #isPlayersTurn = True
         #scoreLabel()
-
-
 
 
 def endGameScreen(): # Call this when game has ended add winner in function
