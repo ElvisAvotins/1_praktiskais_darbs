@@ -4,6 +4,7 @@ from tkinter import messagebox
 from tkinter import font as tkFont
 import tkinter
 from Algorithms import *
+import time
 
 
 bg_color = "#1e1e1e"
@@ -160,7 +161,6 @@ def selectNumber(btn, number):
 def startNewGame():
     global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenStarter, chosenNumber, chosenAlgorithm, starterButtons, algorithmButtons, numberButtons
 
-
     humanPoints = 0
     aiPoints = 0
     bankPoints = 0
@@ -237,8 +237,8 @@ def scoreLabel():
     tk.Label(root, text=f"Computer: {aiPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=1, columnspan=1, padx=5, pady=5, sticky='w')
     tk.Label(root, text=f"Bank: {bankPoints}", bg=bg_color, fg=fg_color).grid(row=3, column=2, columnspan=1, padx=5, pady=5, sticky='w')
 
-def divide_number(divider, number_label, edgeLabel):
-    global chosenNumber, isPlayersTurn, humanPoints, aiPoints
+def divide_number(divider, number_label, edgeLabel, aiMoveTimeLabel):
+    global chosenNumber, isPlayersTurn, humanPoints, aiPoints, aiMoveDuration
 
     if chosenNumber % divider != 0:
         messagebox.showerror("Error", "Division result is not a whole number!")
@@ -251,9 +251,10 @@ def divide_number(divider, number_label, edgeLabel):
         isPlayersTurn = False
 
     state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
-    edges_visited = ai_make_move(state, number_label)
+    edges_visited, aiMoveDuration = ai_make_move(state, number_label)
     try:
         edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
+        aiMoveTimeLabel.config(text=f"AI move time: {aiMoveDuration:.5f} seconds")
     except tkinter.TclError:
         pass
         
@@ -273,29 +274,30 @@ def gameScreen(): # 2. screen
         number_label = tk.Label(root, text=f"{chosenNumber}", bg=bg_color, fg=fg_color, font=largeFont)
         number_label.grid(row=4, column=0, columnspan=10, padx=5, pady=20, sticky='w')
 
-        divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(2, number_label, edgeLabel))
+        divider2 = tk.Button(root, text="2", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(2, number_label, edgeLabel, aiMoveTimeLabel))
         divider2.grid(row=5, column=0, columnspan=1, padx=5, pady=5)
 
-        divider3 = tk.Button(root, text="3", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(3, number_label, edgeLabel))
+        divider3 = tk.Button(root, text="3", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(3, number_label, edgeLabel, aiMoveTimeLabel))
         divider3.grid(row=5, column=1, columnspan=1, padx=5, pady=5)
 
-        divider4 = tk.Button(root, text="4", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(4, number_label, edgeLabel))
+        divider4 = tk.Button(root, text="4", bg=bg_color, fg=fg_color, font=tkFont.Font(size=15), command=lambda: divide_number(4, number_label, edgeLabel, aiMoveTimeLabel))
         divider4.grid(row=5, column=2, columnspan=1, padx=5, pady=5)
 
         edgeLabel = tk.Label(root, text=f"Computer visited edges: ", bg=bg_color, fg=fg_color)
         edgeLabel.grid(row=6, column=0, columnspan=10, padx=5, pady=20, sticky='w')
 
-        tk.Label(root, text=f"Computer average turn time: ", bg=bg_color, fg=fg_color).grid(row=7, column=0, columnspan=10, padx=5, pady=20, sticky='w')
-
+        aiMoveTimeLabel = tk.Label(root, text="AI move time: ", bg=bg_color, fg=fg_color)
+        aiMoveTimeLabel.grid(row=7, column=0, columnspan=10, padx=5, pady=20, sticky='w')
+        
         if chosenStarter == "User":
             isPlayersTurn = True
         else:
             isPlayersTurn = False
         print(f"Is it the players start {isPlayersTurn}")
-        if chosenStarter == "Computer" and isPlayersTurn == False:
+        if chosenStarter == "Computer":
             state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
-            edges_visited = ai_make_move(state, number_label)
-            edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
+            edges_visited, aiMoveDuration = ai_make_move(state, number_label)  # Ensure this function and variables match your code
+
 
     else:
         messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")
@@ -304,8 +306,16 @@ def gameScreen(): # 2. screen
 def ai_make_move(state, number_label):
     # Šeit tiek atzīmēti visi lielumi kas tiks izmantoti šajā funkcijā, un to vērtības ir iespējams mainīt globāli
     global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor
+
+    startTime = time.time()
+    
     if gameOver() == True:
         endGameScreen()
+        return 0, 0
+
+    edges_visited = 0
+    aiMoveDuration = 0
+    
     # Example usage of the minimax function from Huristic2.py
     if chosenAlgorithm == "Minimax":
         # Expected to return vislabāko vērtējumu for AI, the move leading to that score, cik virsotnes apmeklētas, labākais dalītājs
@@ -315,9 +325,9 @@ def ai_make_move(state, number_label):
             chosenNumber = best_move
             scoreUpdate(state,bestDivisor)
             isPlayersTurn = True
-            HumanNextPoints = humanPoints
-            HumanNextPoints += state['chosenNumber'] % chosenNumber  
-            state['humanPoints'] = HumanNextPoints
+            #HumanNextPoints = humanPoints
+            #HumanNextPoints += state['chosenNumber'] % chosenNumber  
+            #state['humanPoints'] = HumanNextPoints
             print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
             print(f"Number of edges visited: {edges_visited}")
             # Update the label displaying the chosen number
@@ -325,9 +335,8 @@ def ai_make_move(state, number_label):
             scoreLabel()
             if gameOver() == True:
                 endGameScreen()
-            return edges_visited  # Return the number of edges visited
+            #return edges_visited  # Return the number of edges visited
     else:
-
         score, best_move, edges_visited, bestDivisor = alphaBeta(state, 0, True, 0, -float('inf'), float('inf'))  # Current state, dziļums 0, is MaximizingPlayer
         
         if best_move is not None:
@@ -345,10 +354,14 @@ def ai_make_move(state, number_label):
             scoreLabel()
             if gameOver() == True:
                 endGameScreen()
-            return edges_visited  # Return the number of edges visited
+            #return edges_visited  # Return the number of edges visited
         #isPlayersTurn = True
         #scoreLabel()
+    endTime = time.time()
 
+    aiMoveDuration = endTime - startTime
+    print(f"AI Move Duration Calculated: {aiMoveDuration:.5f} seconds")
+    return edges_visited, aiMoveDuration  # Return the number of edges visited
 
 def endGameScreen(): # Call this when game has ended add winner in function
     clearWidgets()
