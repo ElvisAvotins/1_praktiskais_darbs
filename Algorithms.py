@@ -1,5 +1,28 @@
+def update_scores(state, isMaximizingPlayer):
+    chosenNumber = state['chosenNumber']
+    aiPoints = state['aiPoints']
+    humanPoints = state['humanPoints']
+    bankPoints = state['bankPoints']
+
+    # Determine if the new number is even or odd
+    if chosenNumber % 2 == 0:
+        score_change = -1  # If even, subtract a point
+    else:
+        score_change = 1   # If odd, add a point
+
+    # Update AI and human points based on the player's turn
+    if isMaximizingPlayer:
+        aiPoints += score_change
+    else:
+        humanPoints += score_change
+
+
+    state['aiPoints'] = aiPoints
+    state['humanPoints'] = humanPoints
+    state['bankPoints'] = bankPoints
+
 def get_children(state, isMaximizingPlayer):
-    current_number = state['chosenNumber']
+    currentNumber = state['chosenNumber']
     possible_divisors = [2, 3, 4]
 
     # šajā sarakstā tiek glabāts šādi
@@ -9,20 +32,17 @@ def get_children(state, isMaximizingPlayer):
 
     # Aprēķinam kuri cipari var doties tālāk, un tiek ievitots jauns ieraksts ar new_number, aiPoints un humanPoints
     for divisor in possible_divisors:
-        if current_number % divisor == 0:
-            new_number = current_number // divisor
+        if currentNumber % divisor == 0:
+            new_number = currentNumber // divisor
             child_state = state.copy()
             child_state['chosenNumber'] = new_number
-            
-            # Determine if the result is even or odd to update scores accordingly
-            score_change = -1 if new_number % 2 == 0 else 1
-
-            if isMaximizingPlayer:  # AI's move
-                child_state['aiPoints'] += score_change
-            else:  # Human's move
-                child_state['humanPoints'] += score_change
-
             children.append(child_state)
+
+    if new_number % 10 == 5 or new_number % 10 == 0:
+        if isMaximizingPlayer:
+            child_state['aiPoints'] += 1
+        else:
+            child_state['humanPoints'] += 1
 
     return children
 
@@ -37,24 +57,25 @@ def check_terminal(state):
     # If the number is <= 10 or cannot be divided by 2, 3, or 4
     if chosenNumber <= 10 or all(chosenNumber % d != 0 for d in [2, 3, 4]):
         # Distribute bank points to the last player who made a move
-        finalAiPoints = aiPoints + (bankPoints if not state.get('isPlayersTurn') else 0)
-        finalHumanPoints = humanPoints + (bankPoints if state.get('isPlayersTurn') else 0)
+        if aiPoints > humanPoints:
+            aiPoints += bankPoints
+        else:
+            humanPoints += bankPoints
+
+        
 
         # Determine the winner
-        if finalAiPoints > finalHumanPoints:
-            print(f"Game Over! AI Wins! Final Scores - AI: {finalAiPoints}, Human: {finalHumanPoints}")
+        if aiPoints > humanPoints:
+            print(f"Game Over! AI Wins! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
             return 1
-        elif finalHumanPoints > finalAiPoints:
-            print(f"Game Over! Human Wins! Final Scores - AI: {finalAiPoints}, Human: {finalHumanPoints}")
+        elif humanPoints > aiPoints:
+            print(f"Game Over! Human Wins! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
             return -1
         else:
-            print(f"Game Over! It's a Draw! Final Scores - AI: {finalAiPoints}, Human: {finalHumanPoints}")
+            print(f"Game Over! It's a Draw! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
             return 0
     # Atgriest None, ja nav sasniegts Terminal state
     return None
-
-
-
 
 
 def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
@@ -175,12 +196,14 @@ def heuristic_evaluation(state, depth=None):
     aiPoints = state.get('aiPoints', 0)
     humanPoints = state.get('humanPoints', 0)
     chosenNumber = state.get('chosenNumber', None)
+    bankPoints = state.get('bankPoints', 0)
     
-    # Tākā ai punkti lai tas varētu maksimizēt savu gāājienu tas tiek reizināts ar lielāku skaitli
-    score_diff = 10 * aiPoints - 1 * humanPoints  
+    aiPoints += bankPoints if not state.get('isPlayersTurn') else 0
+    humanPoints += bankPoints if state.get('isPlayersTurn') else 0
+
+    score_diff = 10 * aiPoints - humanPoints
     
-    print(f"Debug: Depth {depth}, Number: {chosenNumber}, Heuristic Value: {score_diff}, AI Score: {aiPoints}, Human Score: {humanPoints}")
+    print(f"Debug: Depth {depth}, Number: {state['chosenNumber']}, Heuristic Value: {score_diff}, AI Score: {aiPoints}, Human Score: {humanPoints}, Bank Points: {bankPoints}")
+    
     
     return score_diff
-    
-
