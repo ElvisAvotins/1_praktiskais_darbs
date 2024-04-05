@@ -97,7 +97,7 @@ def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
     # The best move is not returned
     # Edges visited for atskaite
     # Divisor None, because we are not divising yet
-    if depth == 3:  
+    if depth == 10:  
         heuristic_value = heuristic_evaluation(state)
         return heuristic_value, None, edges_visited, None  # Return heuristic score, no move, edges visited, and None for divisor
 
@@ -155,7 +155,7 @@ def alphaBeta(state, depth, isMaximizingPlayer, edges_visited, alpha, beta):
         print(f"Terminal Value: {terminal_value}, Chosen Number at Terminal: {state['chosenNumber']}")
         return terminal_value, None, edges_visited, None
 
-    if depth == 3:
+    if depth == 10:
         heuristic_value = heuristic_evaluation(state, depth)
         return heuristic_value, None, edges_visited, None
 
