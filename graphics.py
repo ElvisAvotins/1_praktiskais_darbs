@@ -295,7 +295,7 @@ def gameScreen(): # 2. screen
             isPlayersTurn = False
         print(f"Is it the players start {isPlayersTurn}")
         if chosenStarter == "Computer":
-            state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
+            state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints, 'bankPoints': bankPoints}
             edges_visited, aiMoveDuration = ai_make_move(state, number_label)  # Ensure this function and variables match your code
 
 
@@ -305,7 +305,7 @@ def gameScreen(): # 2. screen
 
 def ai_make_move(state, number_label):
     # Šeit tiek atzīmēti visi lielumi kas tiks izmantoti šajā funkcijā, un to vērtības ir iespējams mainīt globāli
-    global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor
+    global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor, bankPoints
 
     startTime = time.time()
     
