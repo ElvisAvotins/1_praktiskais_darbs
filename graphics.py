@@ -23,6 +23,8 @@ isPlayersTurn = None
 userWins = 0
 computerWins = 0
 winner = ""
+edges_visited = 0
+aiMoveDuration = 0
 
 root = tk.Tk()
 root.title("1. praktiskais darbs")
@@ -49,38 +51,23 @@ def scoreUpdateH(divisor):
     if isPlayersTurn:
         if result % 2 == 0:
             humanPoints -= 1
-            print(f" Point goes away from : {isPlayersTurn}, human", {chosenNumber}, {divisor})
         else:
             humanPoints += 1
-            print(f" Point goes to : {isPlayersTurn}, Human")
         if result % 5 == 0:
             bankPoints += 1
-            print(f"Round Over! Point to the bank goes from: {isPlayersTurn}, Human")
-    else:
-        humanPoints +=1
-        print(f" Point OMGGGGGGGGGG : {isPlayersTurn}, Human")     
 
 def scoreUpdate(state, divisor):
     global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
     #terminal_value = check_terminal(state)
     #print(f"Terminal Value: {terminal_value}, Chosen Number at Terminal: {state['chosenNumber']}")
     Test = state['chosenNumber']/divisor
-    print(f"Testa value: {Test}")
     if not isPlayersTurn:
         if Test % 2 == 0:
             aiPoints -= 1
-            print(f" Point goes away from : {isPlayersTurn}, AI")
         else:
             aiPoints += 1
-            print(f" Point goes to : {isPlayersTurn}, AI", {chosenNumber}, {divisor})
         if Test % 5 == 0:
             bankPoints += 1
-            print(f"Round Over! Point to the bank goes from: {isPlayersTurn}, AI")
-    else:
-        aiPoints += 1
-        print(f" Point WTFFFFFFFFFFFFFF : {isPlayersTurn}, Human")
-
-    # Update the chosenNumber with the result of the division
 
 def gameOver():
     global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
@@ -101,20 +88,15 @@ def PointCount():
     global humanPoints, aiPoints, isPlayersTurn, bankPoints
     if isPlayersTurn:
         aiPoints += bankPoints
-        bankPoints = 0
     else:
         humanPoints += bankPoints
-        bankPoints = 0
 
 def WhoWins():
     if humanPoints > aiPoints:
-        print(f"HUMAN WON {aiPoints}, {humanPoints}")
-        return("User")  # Call the end game screen
+        return("User")
     elif humanPoints < aiPoints:
-        print(f"COMPUTER WON {aiPoints}, {humanPoints}")
         return("Computer")
     else:
-        print(f"DRAWWWWWW {aiPoints}, {humanPoints}")
         return("Draw")
 
 
@@ -126,7 +108,7 @@ def updateButtonSelection(buttonsList, selectedButton):
 
 
 def clearWidgets():
-    # Clears the initial UI window to make  space for new widgets
+    # Clears the initial UI window to make space for new widgets
     for widget in root.winfo_children():
         widget.destroy()
 
@@ -136,7 +118,6 @@ def selectStarter(starter):
     global chosenStarter
     chosenStarter = starter
     updateButtonSelection(starterButtons, starterButtons[0] if starter == "User" else  starterButtons[1])
-    print("The game is gona start: ", starter)
 
 
 def selectAlgorithm(algorithm):
@@ -144,7 +125,6 @@ def selectAlgorithm(algorithm):
     global chosenAlgorithm
     chosenAlgorithm = algorithm
     updateButtonSelection(algorithmButtons, algorithmButtons[0] if algorithm == "Minimax" else algorithmButtons[1])
-    print("You chose: ", algorithm)
 
 
 def selectNumber(btn, number):
@@ -155,7 +135,6 @@ def selectNumber(btn, number):
         button.config(bg=bg_color, fg=fg_color)
     btn.config(bg=selected_color, fg=bg_color)  
     root.update_idletasks()  
-    print("Selected number: ", number)
 
 
 def startNewGame():
@@ -192,12 +171,10 @@ def startGameScreen(): # 1. screen Choose parameters for the game
     
     user = tk.Button(root, text="User", bg=bg_color, fg=fg_color, command=lambda: selectStarter("User"))
     user.grid(row=1, column=0, padx=5, pady=5)
-    # Update list
     starterButtons.append(user)
 
     computer = tk.Button(root, text="Computer", bg=bg_color, fg=fg_color, command=lambda: selectStarter("Computer"))
     computer.grid(row=1, column=1, padx=5, pady=5)
-    #Update list
     starterButtons.append(computer)
 
     global algorithmButtons
@@ -206,12 +183,10 @@ def startGameScreen(): # 1. screen Choose parameters for the game
      
     minimax = tk.Button(root, text="Minimax", bg=bg_color, fg=fg_color, command=lambda: selectAlgorithm("Minimax"))
     minimax.grid(row=3, column=0, padx=5, pady=5)
-    #Update list
     algorithmButtons.append(minimax)
 
     alphaBeta = tk.Button(root, text="Alpha Beta", bg=bg_color, fg=fg_color, command=lambda: selectAlgorithm("Alpha Beta"))
     alphaBeta.grid(row=3, column=1, padx=5, pady=5)
-    #Update list
     algorithmButtons.append(alphaBeta)
 
     global numberButtons
@@ -259,7 +234,7 @@ def divide_number(divider, number_label, edgeLabel, aiMoveTimeLabel):
         pass
         
 def gameScreen(): # 2. screen 
-    global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints, isPlayersTurn
+    global chosenStarter, chosenNumber, chosenAlgorithm, humanPoints, aiPoints, isPlayersTurn, edges_visited, aiMoveDuration
 
     if chosenStarter and chosenNumber and chosenAlgorithm: 
         clearWidgets()
@@ -293,10 +268,10 @@ def gameScreen(): # 2. screen
             isPlayersTurn = True
         else:
             isPlayersTurn = False
-        print(f"Is it the players start {isPlayersTurn}")
         if chosenStarter == "Computer":
             state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints, 'bankPoints': bankPoints}
-            edges_visited, aiMoveDuration = ai_make_move(state, number_label)  # Ensure this function and variables match your code
+            edges_visited, aiMoveDuration = ai_make_move(state, number_label)
+              # Ensure this function and variables match your code
 
 
     else:
@@ -304,7 +279,6 @@ def gameScreen(): # 2. screen
 
 
 def ai_make_move(state, number_label):
-    # Šeit tiek atzīmēti visi lielumi kas tiks izmantoti šajā funkcijā, un to vērtības ir iespējams mainīt globāli
     global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor, bankPoints
 
     startTime = time.time()
@@ -316,7 +290,6 @@ def ai_make_move(state, number_label):
     edges_visited = 0
     aiMoveDuration = 0
     
-    # Example usage of the minimax function from Huristic2.py
     if chosenAlgorithm == "Minimax":
         # Expected to return vislabāko vērtējumu for AI, the move leading to that score, cik virsotnes apmeklētas, labākais dalītājs
         score, best_move, edges_visited, bestDivisor = minimax(state, 0, True)  # Current state, dziļums 0, is MaximizingPlayer
@@ -335,7 +308,6 @@ def ai_make_move(state, number_label):
             scoreLabel()
             if gameOver() == True:
                 endGameScreen()
-            #return edges_visited  # Return the number of edges visited
     else:
         score, best_move, edges_visited, bestDivisor = alphaBeta(state, 0, True, 0, -float('inf'), float('inf'))  # Current state, dziļums 0, is MaximizingPlayer
         
@@ -354,9 +326,6 @@ def ai_make_move(state, number_label):
             scoreLabel()
             if gameOver() == True:
                 endGameScreen()
-            #return edges_visited  # Return the number of edges visited
-        #isPlayersTurn = True
-        #scoreLabel()
     endTime = time.time()
 
     aiMoveDuration = endTime - startTime
