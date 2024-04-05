@@ -250,7 +250,7 @@ def divide_number(divider, number_label, edgeLabel, aiMoveTimeLabel):
         number_label.config(text=chosenNumber)
         isPlayersTurn = False
 
-    state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints}
+    state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints, 'bankPoints': bankPoints}
     edges_visited, aiMoveDuration = ai_make_move(state, number_label)
     try:
         edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
