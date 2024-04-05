@@ -1,8 +1,5 @@
 def update_scores(state, isMaximizingPlayer):
     chosenNumber = state['chosenNumber']
-    aiPoints = state['aiPoints']
-    humanPoints = state['humanPoints']
-    bankPoints = state['bankPoints']
 
     # Determine if the new number is even or odd
     if chosenNumber % 2 == 0:
@@ -12,14 +9,14 @@ def update_scores(state, isMaximizingPlayer):
 
     # Update AI and human points based on the player's turn
     if isMaximizingPlayer:
-        aiPoints += score_change
+        state['aiPoints'] += score_change
     else:
-        humanPoints += score_change
+        state['humanPoints'] += score_change
 
 
-    state['aiPoints'] = aiPoints
-    state['humanPoints'] = humanPoints
-    state['bankPoints'] = bankPoints
+    #state['aiPoints'] = aiPoints
+    #state['humanPoints'] = humanPoints
+    #state['bankPoints'] = bankPoints
 
 def get_children(state, isMaximizingPlayer):
     currentNumber = state['chosenNumber']
@@ -36,13 +33,15 @@ def get_children(state, isMaximizingPlayer):
             new_number = currentNumber // divisor
             child_state = state.copy()
             child_state['chosenNumber'] = new_number
+            # Update scores based on whether it's the AI or human player's turn
+            update_scores(child_state, isMaximizingPlayer)
+            if 'bankPoints' not in child_state:
+                print("Error: 'bankPoints' not found in state.", state)
+                child_state['bankPoints'] = 0 
+            if new_number % 10 == 5 or new_number % 10 == 0:
+                child_state['bankPoints'] += 1
             children.append(child_state)
-
-    if new_number % 10 == 5 or new_number % 10 == 0:
-        if isMaximizingPlayer:
-            child_state['aiPoints'] += 1
-        else:
-            child_state['humanPoints'] += 1
+            
 
     return children
 
