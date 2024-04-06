@@ -14,10 +14,6 @@ def update_scores(state, isMaximizingPlayer):
         state['humanPoints'] += score_change
 
 
-    #state['aiPoints'] = aiPoints
-    #state['humanPoints'] = humanPoints
-    #state['bankPoints'] = bankPoints
-
 def get_children(state, isMaximizingPlayer):
     currentNumber = state['chosenNumber']
     possible_divisors = [2, 3, 4]
@@ -39,7 +35,6 @@ def get_children(state, isMaximizingPlayer):
                 child_state['bankPoints'] += 1
             children.append(child_state)
             
-
     return children
 
 
@@ -58,17 +53,15 @@ def check_terminal(state):
         else:
             humanPoints += bankPoints
 
-        
-
         # Determine the winner
         if aiPoints > humanPoints:
-            print(f"Game Over! AI Wins! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
+            #print(f"Game Over! AI Wins! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
             return 1
         elif humanPoints > aiPoints:
-            print(f"Game Over! Human Wins! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
+            #print(f"Game Over! Human Wins! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
             return -1
         else:
-            print(f"Game Over! It's a Draw! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
+            #print(f"Game Over! It's a Draw! Final Scores - AI: {aiPoints}, Human: {humanPoints}, Bank Points: {bankPoints}")
             return 0
     # Atgriest None, ja nav sasniegts Terminal state
     return None
@@ -116,7 +109,7 @@ def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
         for child in get_children(state, True):
             # Pārejam uz minimizējošā spēlētāja pēdām, lai varētu imitēt ping-pong gājienu
             # lai aprēķinātu, kāds būtu laākais atbildes gājiens no pretinieka
-            eval, _, edges_visited, divisor = minimax(child, depth + 1, False, edges_visited + 1)
+            eval, _, edges_visited, _ = minimax(child, depth + 1, False, edges_visited + 1)
 
             # Gett to the best move
             # pārbaudam vai aprēķinātais svars eval ir lielāks par lielāko svaru bērnam (pēctecim)
@@ -137,7 +130,7 @@ def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
         bestMove = None
         bestDivisor = None  # Initialize the best divisor
         for child in get_children(state, False):
-            eval, _, edges_visited, divisor = minimax(child, depth + 1, True, edges_visited + 1)
+            eval, _, edges_visited, _ = minimax(child, depth + 1, True, edges_visited + 1)
             if eval < minEval:
                 minEval = eval
                 bestMove = child['chosenNumber']  # Assuming this represents the move
@@ -199,7 +192,6 @@ def alphaBeta(state, depth, isMaximizingPlayer, edges_visited, alpha, beta):
 def heuristic_evaluation(state, depth=None):
     aiPoints = state.get('aiPoints', 0)
     humanPoints = state.get('humanPoints', 0)
-    chosenNumber = state.get('chosenNumber', None)
     bankPoints = state.get('bankPoints', 0)
     
     aiPoints += bankPoints if not state.get('isPlayersTurn') else 0
@@ -208,6 +200,5 @@ def heuristic_evaluation(state, depth=None):
     score_diff = 10 * aiPoints - humanPoints
     
     print(f"Debug: Depth {depth}, Number: {state['chosenNumber']}, Heuristic Value: {score_diff}, AI Score: {aiPoints}, Human Score: {humanPoints}, Bank Points: {bankPoints}")
-    
     
     return score_diff

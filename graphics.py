@@ -2,7 +2,6 @@ import tkinter as tk
 import random
 from tkinter import messagebox
 from tkinter import font as tkFont
-import tkinter
 from Algorithms import *
 import time
 
@@ -230,7 +229,7 @@ def divide_number(divider, number_label, edgeLabel, aiMoveTimeLabel):
     try:
         edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
         aiMoveTimeLabel.config(text=f"AI move time: {aiMoveDuration:.5f} seconds")
-    except tkinter.TclError:
+    except tk.TclError:
         pass
         
 def gameScreen(): # 2. screen 
@@ -274,7 +273,7 @@ def gameScreen(): # 2. screen
             try:
                 edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
                 aiMoveTimeLabel.config(text=f"AI move time: {aiMoveDuration:.5f} seconds")
-            except tkinter.TclError:
+            except tk.TclError:
                 pass
 
     else:
