@@ -36,9 +36,13 @@ root.option_add("*foreground", fg_color)
 
 def randomNumbers():
     count = 0
-    randomlist = [26880]
+    randomlist = []
 
-    #
+    while count < 5:
+        num = random.randint(20000, 30000)
+        if num % 12 == 0:
+            randomlist.append(num)
+            count += 1
     return randomlist
 
 def scoreUpdateH(divisor):
@@ -272,7 +276,6 @@ def gameScreen(): # 2. screen
                 aiMoveTimeLabel.config(text=f"AI move time: {aiMoveDuration:.5f} seconds")
             except tkinter.TclError:
                 pass
-
 
     else:
         messagebox.showinfo("Selection Incomplete", "Please make all selections before starting the game.")

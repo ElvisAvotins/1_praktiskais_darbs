@@ -34,10 +34,7 @@ def get_children(state, isMaximizingPlayer):
             child_state = state.copy()
             child_state['chosenNumber'] = new_number
             # Update scores based on whether it's the AI or human player's turn
-            update_scores(child_state, isMaximizingPlayer)
-            if 'bankPoints' not in child_state:
-                print("Error: 'bankPoints' not found in state.", state)
-                child_state['bankPoints'] = 0 
+            update_scores(child_state, isMaximizingPlayer) 
             if new_number % 10 == 5 or new_number % 10 == 0:
                 child_state['bankPoints'] += 1
             children.append(child_state)
