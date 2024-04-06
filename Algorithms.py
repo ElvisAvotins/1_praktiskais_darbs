@@ -67,7 +67,7 @@ def check_terminal(state):
     return None
 
 
-def minimax(state, depth, isMaximizingPlayer, edges_visited=0):
+def minimax(state, depth, isMaximizingPlayer, edges_visited):
     #Pårbauda vai spele var turpinåties vai ir end of the game
     terminal_value = check_terminal(state)
 

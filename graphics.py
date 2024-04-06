@@ -294,7 +294,7 @@ def ai_make_move(state, number_label):
     
     if chosenAlgorithm == "Minimax":
         # Expected to return vislabāko vērtējumu for AI, the move leading to that score, cik virsotnes apmeklētas, labākais dalītājs
-        score, best_move, edges_visited, bestDivisor = minimax(state, 0, True)  # Current state, dziļums 0, is MaximizingPlayer
+        score, best_move, edges_visited, bestDivisor = minimax(state, 0, True, 0)  # Current state, dziļums 0, is MaximizingPlayer
         if best_move is not None:
             # Update the variables based on the best possible
             chosenNumber = best_move
