@@ -36,13 +36,9 @@ root.option_add("*foreground", fg_color)
 
 def randomNumbers():
     count = 0
-    randomlist = []
+    randomlist = [26880]
 
-    while count < 5:
-        num = random.randint(20000, 30000)
-        if num % 12 == 0:
-            randomlist.append(num)
-            count += 1
+    #
     return randomlist
 
 def scoreUpdateH(divisor):
@@ -271,7 +267,11 @@ def gameScreen(): # 2. screen
         if chosenStarter == "Computer":
             state = {'chosenNumber': chosenNumber, 'aiPoints': aiPoints, 'humanPoints': humanPoints, 'bankPoints': bankPoints}
             edges_visited, aiMoveDuration = ai_make_move(state, number_label)
-              # Ensure this function and variables match your code
+            try:
+                edgeLabel.config(text=f"Edges visited by {chosenAlgorithm}: {edges_visited}")
+                aiMoveTimeLabel.config(text=f"AI move time: {aiMoveDuration:.5f} seconds")
+            except tkinter.TclError:
+                pass
 
 
     else:
