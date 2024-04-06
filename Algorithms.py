@@ -160,18 +160,23 @@ def alphaBeta(state, depth, isMaximizingPlayer, edges_visited, alpha, beta):
         maxEval = float('-inf')
         bestMove = None
         bestDivisor = None
-
+        # Apskatam katru bērnu (iespējamo turpmāko gājienu), ko var veikt šajā stāvoklī.
         for child in get_children(state, True):
+             # Rekursīvi izsaukts algoritms alpha-beta ar citiem parametriem.
             eval, _, edges_visited, _ = alphaBeta(child, depth + 1,  False, edges_visited + 1, alpha, beta)
             maxEval = max(maxEval, eval)
+            # Ja sasniegts vai pārsniegts beta, nav jēgas turpināt meklēt.
             if maxEval >= beta:
                 return maxEval, bestMove, edges_visited, bestDivisor
+            # Atjaunina alfa vērtību, ja atrasts labāks rezultāts.
             if maxEval > alpha:
                 alpha = maxEval
                 bestMove = child['chosenNumber']
                 bestDivisor = state['chosenNumber'] // child['chosenNumber']
+        # Atgriež labāko vērtību, labāko gājienu, apmeklēto virsotņu skaitu un labāko dalītāju.        
         return maxEval, bestMove, edges_visited, bestDivisor
     else:
+        # Ja tagad ir minimizējošais spēlētājs, sākas līdzīga darbība, bet šoreiz meklē minimālo vērtību.
         minEval = float('inf')
         bestMove = None
         bestDivisor = None
@@ -179,12 +184,15 @@ def alphaBeta(state, depth, isMaximizingPlayer, edges_visited, alpha, beta):
         for child in get_children(state, False):
             eval, _, edges_visited, _ = alphaBeta(child, depth + 1,  True, edges_visited + 1, alpha, beta)
             minEval = min(minEval, eval)
+            # Ja sasniegta vai pārsniegta alfa, nav jēgas turpināt meklēt.
             if minEval <= alpha:
                 return minEval, bestMove, edges_visited, bestDivisor
+            # Atjaunina beta vērtību, ja atrasts labāks rezultāts.
             if minEval < beta:
                 beta = minEval
                 bestMove = child['chosenNumber']
                 bestDivisor = state['chosenNumber'] // child['chosenNumber']
+        # Atgriež minimālo vērtību, labāko gājienu, apmeklēto virsotņu skaitu un labāko dalītāju.        
         return minEval, bestMove, edges_visited, bestDivisor
 
     
