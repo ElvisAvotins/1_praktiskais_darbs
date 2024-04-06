@@ -22,10 +22,11 @@
 12. Atskaite Rinalds
 
 Fix
-1.Punktu skaitisana juris (izdarīts)
-2.endscreen gamepoints, + bankpoints elvis
-3.computer start juris (izdarīts)
-4.Log files Elvis
+1. testi minimax, alpha-beta
+2. Atsauces uz chatgpt
+3. Atsauces uz atgoritmu piemēriem,
+4. Atsaucē github links
+   
 
 ---Uzdevuma nosacījumi---
 
