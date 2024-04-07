@@ -300,9 +300,6 @@ def ai_make_move(state, number_label):
             chosenNumber = best_move
             scoreUpdate(state,bestDivisor)
             isPlayersTurn = True
-            #HumanNextPoints = humanPoints
-            #HumanNextPoints += state['chosenNumber'] % chosenNumber  
-            #state['humanPoints'] = HumanNextPoints
             print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
             print(f"Number of edges visited: {edges_visited}")
             # Update the label displaying the chosen number
@@ -318,9 +315,6 @@ def ai_make_move(state, number_label):
             chosenNumber = best_move
             scoreUpdate(state,bestDivisor)
             isPlayersTurn = True
-            #HumanNextPoints = humanPoints
-            #HumanNextPoints += state['chosenNumber'] % chosenNumber  
-            #state['humanPoints'] = HumanNextPoints
             #print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
             #print(f"Number of edges visited: {edges_visited}")
             # Update the label displaying the chosen number
