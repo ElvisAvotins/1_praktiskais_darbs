@@ -45,7 +45,7 @@ def randomNumbers():
     return randomlist
 
 def scoreUpdateH(divisor):
-    global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
+    global humanPoints, bankPoints, isPlayersTurn, chosenNumber
     result = chosenNumber / divisor
     if isPlayersTurn:
         if result % 2 == 0:
@@ -56,7 +56,7 @@ def scoreUpdateH(divisor):
             bankPoints += 1
 
 def scoreUpdate(state, divisor):
-    global humanPoints, aiPoints, bankPoints, isPlayersTurn, chosenNumber
+    global aiPoints, bankPoints, isPlayersTurn, chosenNumber
     #terminal_value = check_terminal(state)
     #print(f"Terminal Value: {terminal_value}, Chosen Number at Terminal: {state['chosenNumber']}")
     Test = state['chosenNumber']/divisor
