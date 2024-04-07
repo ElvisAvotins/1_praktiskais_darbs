@@ -281,7 +281,7 @@ def gameScreen(): # 2. screen
 
 
 def ai_make_move(state, number_label):
-    global chosenNumber, isPlayersTurn, humanPoints, aiPoints, bestDivisor, bankPoints
+    global chosenNumber, isPlayersTurn, bestDivisor
 
     startTime = time.time()
     
