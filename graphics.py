@@ -294,7 +294,7 @@ def ai_make_move(state, number_label):
     
     if chosenAlgorithm == "Minimax":
         # Expected to return vislabāko vērtējumu for AI, the move leading to that score, cik virsotnes apmeklētas, labākais dalītājs
-        score, best_move, edges_visited, bestDivisor = minimax(state, 0, True, 0)  # Current state, dziļums 0, is MaximizingPlayer
+        _, best_move, edges_visited, bestDivisor = minimax(state, 0, True, 0)  # Current state, dziļums 0, is MaximizingPlayer, edges_visited
         if best_move is not None:
             # Update the variables based on the best possible
             chosenNumber = best_move
@@ -311,16 +311,16 @@ def ai_make_move(state, number_label):
             if gameOver() == True:
                 endGameScreen()
     else:
-        score, best_move, edges_visited, bestDivisor = alphaBeta(state, 0, True, 0, -float('inf'), float('inf'))  # Current state, dziļums 0, is MaximizingPlayer
+        _, best_move, edges_visited, bestDivisor = alphaBeta(state, 0, True, 0, -float('inf'), float('inf'))  # Current state, dziļums 0, is MaximizingPlayer
         
         if best_move is not None:
             # Update the variables based on the best possible
             chosenNumber = best_move
             scoreUpdate(state,bestDivisor)
             isPlayersTurn = True
-            HumanNextPoints = humanPoints
-            HumanNextPoints += state['chosenNumber'] % chosenNumber  
-            state['humanPoints'] = HumanNextPoints
+            #HumanNextPoints = humanPoints
+            #HumanNextPoints += state['chosenNumber'] % chosenNumber  
+            #state['humanPoints'] = HumanNextPoints
             #print(f"AI chooses {chosenNumber} (divided by {bestDivisor})")  # Print the chosen number and divisor
             #print(f"Number of edges visited: {edges_visited}")
             # Update the label displaying the chosen number
