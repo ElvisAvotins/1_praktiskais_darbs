@@ -21,6 +21,7 @@ bankPoints = 0
 isPlayersTurn = None
 userWins = 0
 computerWins = 0
+draw = 0
 winner = ""
 edges_visited = 0
 aiMoveDuration = 0
@@ -338,11 +339,13 @@ def endGameScreen(): # Call this when game has ended add winner in function
     winnerLabel = tk.Label(root, text=f"Winner: {winner}", bg=bg_color, fg=fg_color)
     winnerLabel.grid(row=1, column=0, columnspan=10, padx=5, pady=10, sticky='w')
 
-    global userWins, computerWins
+    global userWins, computerWins, draw
     if winner == "User":
         userWins += 1
     if winner == "Computer":
         computerWins += 1
+    if winner == "Draw":
+        draw += 1
     
     scoreLabel()
 
@@ -354,6 +357,9 @@ def endGameScreen(): # Call this when game has ended add winner in function
 
     computerWinsLabel = tk.Label(root, text=f"Computer: {computerWins}", bg=bg_color, fg=fg_color)
     computerWinsLabel.grid(row=5, column=1, columnspan=1, padx=5, pady=5, sticky='w')
+
+    drawLabel = tk.Label(root, text=f"Draw: {draw}", bg=bg_color, fg=fg_color)
+    drawLabel.grid(row=5, column=2, columnspan=1, padx=5, pady=5, sticky='w')
 
     newGameButton = tk.Button(root, text="New Game", bg=bg_color, fg=fg_color, command=startNewGame)
     newGameButton.grid(row=6, column=0, columnspan=2, padx=10, pady=5, sticky='w')
