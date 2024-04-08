@@ -22,10 +22,8 @@
 12. Atskaite- Visi :)
 
 Fix
-1. testi minimax, alpha-beta
 2. Atsauces uz chatgpt
-3. Atsauces uz atgoritmu piemēriem,
-4. Atsaucē github links
+
    
 
 ---Uzdevuma nosacījumi---
