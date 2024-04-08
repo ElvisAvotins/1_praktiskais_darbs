@@ -306,6 +306,7 @@ def ai_make_move(state, number_label):
             # Update the label displaying the chosen number
             number_label.config(text=chosenNumber)
             scoreLabel()
+            endTime = time.time()
             if gameOver() == True:
                 endGameScreen()
     else:
@@ -321,9 +322,9 @@ def ai_make_move(state, number_label):
             # Update the label displaying the chosen number
             number_label.config(text=chosenNumber)
             scoreLabel()
+            endTime = time.time()
             if gameOver() == True:
                 endGameScreen()
-    endTime = time.time()
 
     aiMoveDuration = endTime - startTime
     print(f"AI Move Duration Calculated: {aiMoveDuration:.5f} seconds")
