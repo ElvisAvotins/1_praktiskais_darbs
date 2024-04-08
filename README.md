@@ -19,7 +19,7 @@
 3. Heiristiskā User - min PC- max Evita
 4. Alpha - beta User - min PC- max Evita Artūrs
 8. Average turn time PC Evita Artūrs
-12. Atskaite Rinalds
+12. Atskaite- Visi :)
 
 Fix
 1. testi minimax, alpha-beta
