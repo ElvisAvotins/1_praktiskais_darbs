@@ -193,9 +193,6 @@ def heuristic_evaluation(state, depth=None):
     aiPoints = state.get('aiPoints', 0)
     humanPoints = state.get('humanPoints', 0)
     bankPoints = state.get('bankPoints', 0)
-    
-    aiPoints += bankPoints if not state.get('isPlayersTurn') else 0
-    humanPoints += bankPoints if state.get('isPlayersTurn') else 0
 
     score_diff = 10 * aiPoints - humanPoints
     
